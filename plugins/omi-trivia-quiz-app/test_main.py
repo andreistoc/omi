@@ -462,6 +462,24 @@ class TestEndpointsHermetic(unittest.IsolatedAsyncioTestCase):
         self.assertIsNone(resp2.error)
         self.assertEqual(self.mock_client.get.call_count, 1)
 
+    async def test_upstream_client_exception_returns_canned_error(self):
+        self.mock_client.get.side_effect = RuntimeError("network down")
+
+        # 1. get_trivia_question must catch exception, log server-side, and return canned error
+        req_trivia = GetTriviaQuestionRequest()
+        resp_trivia = await get_trivia_question(req_trivia)
+        self.assertIsNotNone(resp_trivia.error)
+        self.assertIn("Failed to fetch trivia question", resp_trivia.error)
+        self.assertIsNone(resp_trivia.result)
+
+        # 2. get_true_false_quiz must catch exception, log server-side, and return canned error
+        req_tf = QuickTrueFalseQuizRequest()
+        resp_tf = await get_true_false_quiz(req_tf)
+        self.assertIsNotNone(resp_tf.error)
+        self.assertIn("Failed to fetch True/False quiz", resp_tf.error)
+        self.assertIsNone(resp_tf.result)
+
+
 
 class TestFastAPIHttp(unittest.TestCase):
     """Test HTTP routing and exception handling."""

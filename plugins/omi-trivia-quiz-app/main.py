@@ -9,6 +9,7 @@ Requires zero external authentication or API keys.
 from collections import OrderedDict
 from contextlib import asynccontextmanager
 import html
+import logging
 import random
 import time
 from typing import Any, Dict, List, Optional, Tuple
@@ -29,6 +30,9 @@ OPENTDB_API_URL = "https://opentdb.com/api.php"
 OPENTDB_CATEGORY_URL = "https://opentdb.com/api_category.php"
 REQUEST_TIMEOUT_SECONDS = 15.0
 USER_AGENT = "omi-trivia-quiz-app/1.0 (https://omi.me)"
+
+logger = logging.getLogger("omi-trivia-quiz-app")
+
 
 
 # ---------------------------------------------------------------------------
